@@ -57,11 +57,18 @@ public class ValidateISBNTest {
         validator.checkISBN("helloworld");
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test
     public void checkISBNWithXIsValid()
     {
         ValidateISBN validator = new ValidateISBN();
         boolean result = validator.checkISBN("012000030X");
         assertTrue(result);
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void checkLongISBNWithXIsNotValid()
+    {
+        ValidateISBN validator = new ValidateISBN();
+        validator.checkISBN("978185326008X");
     }
 }

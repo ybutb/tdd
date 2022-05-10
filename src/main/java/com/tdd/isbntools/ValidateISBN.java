@@ -24,12 +24,14 @@ public class ValidateISBN
             char currentChar = isbn.charAt(i);
 
             if (!Character.isDigit(currentChar)) {
-                if (!(i != ISBN_SHORT - 1 && currentChar != 'X')) {
+                if ((i != ISBN_SHORT - 1 && currentChar != 'X')) {
                     throw new NumberFormatException("ISBN should contain only digits.");
                 }
-            }
 
-            total += Character.getNumericValue(isbn.charAt(i)) * (ISBN_SHORT - i);
+                total += 10;
+            } else {
+                total += Character.getNumericValue(isbn.charAt(i)) * (ISBN_SHORT - i);
+            }
         }
 
         return total % MULTIPLIER_ISBN_SHORT == 0;
@@ -43,9 +45,7 @@ public class ValidateISBN
             char currentChar = isbn.charAt(i);
 
             if (!Character.isDigit(currentChar)) {
-                if (!(i != ISBN_LONG - 1 && currentChar != 'X')) {
-                    throw new NumberFormatException("ISBN should contain only digits.");
-                }
+                throw new NumberFormatException("ISBN should contain only digits.");
             }
 
             int multiplier = 1;
