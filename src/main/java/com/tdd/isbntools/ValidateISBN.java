@@ -2,39 +2,48 @@ package com.tdd.isbntools;
 
 public class ValidateISBN
 {
-    public boolean checkISBN(String isbn) throws NumberFormatException {
-        if (isbn.length() != 10 && isbn.length() != 13) {throw new NumberFormatException("ISBN should be 10 digits long.");}
+    final private int ISBN_SHORT = 10;
+    final private int ISBN_LONG = 13;
+    final private int MULTIPLIER_ISBN_SHORT = 11;
+    final private int MULTIPLIER_ISBN_LONG = 10;
 
-        if (isbn.length() == 13) {
-            return validate13DigitsISBN(isbn);
+    public boolean checkISBN(String isbn) throws NumberFormatException {
+        if (isbn.length() == ISBN_LONG) {
+            return validateLongISBN(isbn);
+        } else if (isbn.length() == ISBN_SHORT) {
+            return validateShortISBN(isbn);
         }
 
+        throw new NumberFormatException("ISBN should be 10 or 13 digits long.");
+    }
+
+    private boolean validateShortISBN(String isbn) {
         int total = 0;
 
-        for (int i = 0; i < isbn.length(); i++) {
+        for (int i = 0; i < ISBN_SHORT; i++) {
             char currentChar = isbn.charAt(i);
 
             if (!Character.isDigit(currentChar)) {
-                if (!(i != isbn.length() - 1 && currentChar != 'X')) {
+                if (!(i != ISBN_SHORT - 1 && currentChar != 'X')) {
                     throw new NumberFormatException("ISBN should contain only digits.");
                 }
             }
 
-            total += Character.getNumericValue(isbn.charAt(i)) * (10 - i);
+            total += Character.getNumericValue(isbn.charAt(i)) * (ISBN_SHORT - i);
         }
 
-        return total % 11 == 0;
+        return total % MULTIPLIER_ISBN_SHORT == 0;
     }
 
-    private boolean validate13DigitsISBN(String isbn)
+    private boolean validateLongISBN(String isbn)
     {
         int total = 0;
 
-        for (int i = 0; i < isbn.length(); i++) {
+        for (int i = 0; i < ISBN_LONG; i++) {
             char currentChar = isbn.charAt(i);
 
             if (!Character.isDigit(currentChar)) {
-                if (!(i != isbn.length() - 1 && currentChar != 'X')) {
+                if (!(i != ISBN_LONG - 1 && currentChar != 'X')) {
                     throw new NumberFormatException("ISBN should contain only digits.");
                 }
             }
@@ -48,6 +57,6 @@ public class ValidateISBN
             total += Character.getNumericValue(isbn.charAt(i)) * multiplier;
         }
 
-        return total % 10 == 0;
+        return total % MULTIPLIER_ISBN_LONG == 0;
     }
 }
